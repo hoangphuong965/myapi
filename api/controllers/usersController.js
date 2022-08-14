@@ -1,3 +1,5 @@
+const User = require("../models/userMode")
+
 class UsersController 
 {
     signup = () => {
