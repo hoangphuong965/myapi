@@ -1,5 +1,5 @@
 const {Sequelize, DataTypes} = require('sequelize');
-// const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 const mysql = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD,{
     host: process.env.DB_HOST,
     dialect: 'mysql',
@@ -25,7 +25,7 @@ const User = mysql.define('User',{
         validate: {
             len: {
                 msg: "Password must be at least 8 characters.",
-                args: [8, 255]
+                args: [6, 255]
             }
         }
     }
@@ -37,16 +37,16 @@ const User = mysql.define('User',{
 
 User.sync();
 
-// User.beforeCreate(async (user, options) => {
-//     const hashed = await bcrypt.hash(user.password, 10);
-//     user.password = hashed;
-// });
+User.beforeCreate(async (user, options) => {
+    const hashed = await bcrypt.hash(user.password, 10);
+    user.password = hashed;
+});
 
-// User.beforeSave(async (user, options) => {
-//     if(user.updatePassword) {
-//         const hashed = await bcrypt.hash(user.password, 10);
-//         user.password = hashed;
-//     }
-// })
+User.beforeSave(async (user, options) => {
+    if(user.updatePassword) {
+        const hashed = await bcrypt.hash(user.password, 10);
+        user.password = hashed;
+    }
+})
 
 module.exports = User;

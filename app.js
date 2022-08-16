@@ -5,6 +5,7 @@ const contactRoutes = require('./api/routes/contacts');
 const todoRoutes = require('./api/routes/todos');
 const userRoutes = require('./api/routes/users');
 const bodyParser = require('body-parser');
+const checkAuth = require('./api/middleware/checkAuth');
 
 
 app.use(bodyParser.urlencoded({extended:false}));
@@ -22,8 +23,8 @@ app.use((req, res, next) => {
 })
 
 //Routes 
-app.use('/contacts', contactRoutes);
-app.use('/todos', todoRoutes);
+app.use('/contacts', checkAuth ,contactRoutes);
+app.use('/todos', checkAuth ,todoRoutes);
 app.use('/users', userRoutes);
 
 //Error Handling
